@@ -1,17 +1,15 @@
-from utilities.data_utils import CoNLLDataset
-from engine.ner_model import NERModel
+# [Truong] This reference script used to train the LSTM 
+from utilities.dataUtils import CoNLLDataset
+from engine.ner import NERModel
 from utilities.config import Config
 
 
 def main():
-    # create instance of config
     config = Config()
 
     # build model
     model = NERModel(config)
-    model.build()
-    # model.restore_session("results/crf/model.weights/") # optional, restore weights
-    # model.reinitialize_weights("proj")
+    model.buildGraph()
 
     # create datasets
     dev   = CoNLLDataset(config.filename_dev, config.processing_word,
@@ -19,7 +17,6 @@ def main():
     train = CoNLLDataset(config.filename_train, config.processing_word,
                          config.processing_tag, config.max_iter)
 
-    # train model
     model.train(train, dev)
 
 if __name__ == "__main__":

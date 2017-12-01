@@ -1,20 +1,12 @@
 import os
 
-
-from .general_utils import get_logger
-from .data_utils import get_trimmed_glove_vectors, load_vocab, \
+from .commonUtils import get_logger
+from .dataUtils import get_trimmed_glove_vectors, load_vocab, \
         get_processing_word
 
 
 class Config():
     def __init__(self, load=True):
-        """Initialize hyperparameters and load vocabs
-
-        Args:
-            load_embeddings: (bool) if True, load embeddings into
-                np array, else None
-
-        """
         # directory for training outputs
         if not os.path.exists(self.dir_output):
             os.makedirs(self.dir_output)
@@ -26,15 +18,7 @@ class Config():
         if load:
             self.load()
 
-
     def load(self):
-        """Loads vocabulary, processing functions and embeddings
-
-        Supposes that build_data.py has been run successfully and that
-        the corresponding files have been created (vocab and trimmed GloVe
-        vectors)
-
-        """
         # 1. vocabulary
         self.vocab_words = load_vocab(self.filename_words)
         self.vocab_tags  = load_vocab(self.filename_tags)
@@ -66,27 +50,23 @@ class Config():
 
     # glove files
     filename_glove = "data/glove.6B/glove.6B.{}d.txt".format(dim_word)
-    # trimmed embeddings (created from glove_filename with build_data.py)
     filename_trimmed = "data/glove.6B.{}d.trimmed.npz".format(dim_word)
     use_pretrained = True
 
     # dataset
-    # filename_dev = "data/coNLL/eng/eng.testa.iob"
-    # filename_test = "data/coNLL/eng/eng.testb.iob"
-    # filename_train = "data/coNLL/eng/eng.train.iob"
-
-    filename_dev = filename_test = filename_train = "data/test.txt" # test
+    filename_dev = "data/eng.testa"
+    filename_test = "data/eng.testb"
+    filename_train = "data/eng.train"
 
     max_iter = None # if not None, max number of examples in Dataset
 
-    # vocab (created from dataset with build_data.py)
     filename_words = "data/words.txt"
     filename_tags = "data/tags.txt"
     filename_chars = "data/chars.txt"
 
     # training
     train_embeddings = False
-    nepochs          = 15
+    nepochs          = 1
     dropout          = 0.5
     batch_size       = 20
     lr_method        = "adam"
@@ -98,6 +78,3 @@ class Config():
     # model hyperparameters
     hidden_size_char = 100 # lstm on chars
     hidden_size_lstm = 300 # lstm on word embeddings
-
-    use_crf = True
-    use_chars = True

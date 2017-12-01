@@ -11,7 +11,15 @@ def main():
     model = NERModel(config)
     model.buildGraph()
     model.restoreSession('results/test/model.weights/')
-    # model.reinitialize_weights("proj")
+
+    # Test a string
+    sentence = "President Xin Jinping of China, on hist first state visit to the United States, showed off his\
+            familiarity with American history and pop culture last night"
+
+    wordList = sentence.strip().split(" ")
+    pred = model.predict(wordList)
+    print("Input sentence: ", sentence)
+    print("Prediction result = ", pred)
 
 if __name__ == "__main__":
     main()
